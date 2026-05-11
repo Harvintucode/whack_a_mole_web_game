@@ -1,4 +1,6 @@
-/* Xóa các khoảng trắng mặc định của trình duyệt */
+/* =========================================
+   1. CÀI ĐẶT CHUNG (RESET & BODY)
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -6,24 +8,21 @@
 }
 
 body {
-    /* Thêm hình nền bg_main.png */
     background-image: url('../assets/bg_main.png');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh; 
     
-    /* Căn giữa chữ và nội dung */
+    height: 100vh; /* Giữ nguyên 100% chiều cao màn hình */
+    overflow: hidden; /* QUAN TRỌNG: Ẩn nội dung thừa, khóa không cho cuộn trang */
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: Arial, sans-serif;
-    
-    /* Đổi con trỏ chuột mặc định thành hình cái búa */
     cursor: url('../assets/hammer_icon.png'), auto;
 }
 
-/* Khi người chơi bấm chuột (click) thì đổi sang hình búa đang đập */
 body:active {
     cursor: url('../assets/hammer_slamicon.png'), auto;
 }
@@ -31,121 +30,90 @@ body:active {
 h1 {
     margin-top: 20px;
     color: #333;
-    text-shadow: 2px 2px 0px #fff; /* Tạo viền trắng cho chữ dễ đọc trên nền vàng */
+    text-shadow: 2px 2px 0px #fff; 
 }
 
-/* Thiết lập lưới 4x4 cho Map 1 */
-.game-board {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Chia làm 4 cột bằng nhau */
-    gap: 30px; /* Khoảng cách giữa các lỗ */
-    margin-top: 50px; /* Cách tiêu đề một khoảng */
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.1); /* Tạo một mảng nền hơi tối cho nguyên khu vực đập chuột */
-    border-radius: 15px;
-}
+/* Các background thay đổi bằng JS */
+body.menu-bg { background-image: url('../assets/bg_menu.png'); }
+body.game-bg { background-image: url('../assets/bg_main.png'); }
+body.gameover-bg { background-image: url('../assets/bg_gameover.png'); }
 
-/* --- BẢN ĐỒ MAP 3 (5x5) --- */
-/* Khi thẻ game-board được gắn thêm class map3, nó sẽ ghi đè các thuộc tính cũ */
-.game-board.map3 {
-    grid-template-columns: repeat(5, 1fr); /* Đổi thành 5 cột */
-    gap: 15px; /* Thu hẹp khoảng cách để nhét vừa 25 lỗ */
-    width: 650px; /* Nới rộng bảng ra một xíu */
-}
-
-/* Thu nhỏ các lỗ và chuột lại một chút để không bị tràn màn hình */
-.game-board.map3 .hole {
-    width: 80px;
-    height: 80px;
-}
-
-.game-board.map3 .mole {
-    width: 60px;
-}
-
-/* Vẽ hình cái lỗ chuột bằng CSS */
-.hole {
-    width: 100px;
-    height: 100px;
-    background-color: #5c3a21; /* Màu đất tối */
-    border-radius: 50%; /* Cắt thành hình tròn/oval */
-    
-    /* Các thuộc tính quan trọng để làm animation sau này */
-    position: relative; 
-    overflow: hidden; /* Cực kỳ quan trọng: Bất cứ thứ gì thò ra ngoài hình tròn này sẽ bị cắt mất (giúp chuột giấu mình) */
-    
-    /* Căn cho chuột nằm ở sát đáy lỗ */
+/* =========================================
+   2. CÁC MÀN HÌNH & NÚT BẤM (UI CHUNG)
+   ========================================= */
+/* --- KHUNG CHỨA MENU --- */
+.menu-board {
+    background-image: url();
+    background-size: 80% 80%;
+    background-repeat: no-repeat;
+    padding: 60px 100px 80px 100px;
+    margin-top: 8vh;
     display: flex;
-    justify-content: center;
-    align-items: flex-end; 
-    
-    /* Tạo hiệu ứng bóng đổ cho lỗ có chiều sâu */
-    box-shadow: inset 0px -10px 15px rgba(0,0,0,0.5);
+    flex-direction: column;
+    align-items: center;
+    image-rendering: pixelated;
+    filter: drop-shadow(0px 20px 15px rgba(0,0,0,0.4)); /* Đổ bóng cho bảng gỗ nổi lên */
 }
 
-/* Chỉnh kích thước và giấu chuột đi */
-.mole {
-    width: 80px;
-    /* Đẩy con chuột tụt hẳn xuống dưới đáy lỗ (100% chiều cao của nó) */
-    transform: translateY(100%); 
-    
-    /* Tạo hiệu ứng trượt lên/xuống mượt mà trong 0.3 giây */
-    transition: transform 0.3s ease-out; 
-    
-    /* Chặn người chơi click trúng chuột khi nó chưa trồi lên hẳn */
-    pointer-events: none; 
+
+/* --- LINH VẬT (MASCOT) --- */
+.menu-mascot {
+    width: 180px;
+    margin-bottom: 10px;
+    animation: float 2s ease-in-out infinite; /* Hiệu ứng bay bổng */
 }
 
-/* Class này sẽ được Nhóm 1 (Logic) dùng JS để thêm vào khi muốn chuột hiện lên */
-.mole.up {
-    /* Kéo con chuột trở lại vị trí nhô lên */
-    transform: translateY(20px); 
-    /* Cho phép click (đập) khi chuột đã trồi lên */
-    pointer-events: auto; 
-}
-/* Bảng thông số (Điểm, Thời gian, Mạng) */
-.stat {
-    display: flex;
-    align-items: center; /* Căn giữa chữ và icon/số theo chiều dọc */
-    gap: 8px; /* Thêm một chút khoảng cách giữa chữ và số/tim cho thoáng */
+
+/* --- TIÊU ĐỀ GAME 3D --- */
+.game-title {
+    font-size: 70px;
+    color: #ffcc00;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    /* Đổ bóng nhiều lớp tạo cảm giác 3D cứng cáp */
+    text-shadow: 4px 4px 0px #d9381e,
+                 8px 8px 0px #5c3a21,
+                 12px 12px 15px rgba(0,0,0,0.5);
 }
 
-.hud {
-    display: flex;
-    justify-content: space-between; /* Đẩy 3 thông số ra xa nhau */
-    width: 650px; /* Bằng với chiều rộng dự kiến của bảng game */
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.8); /* Nền trắng hơi trong suốt */
-    border-radius: 10px;
-    border: 3px solid #5c3a21; /* Viền màu nâu đồng bộ với lỗ chuột */
-    box-shadow: 0px 4px 0px #5c3a21; /* Đổ bóng tạo cảm giác 3D */
-    font-size: 20px;
+
+.menu-subtitle {
+    font-size: 26px;
     font-weight: bold;
-    color: #333;
+    color: #fff;
+    text-shadow: 2px 2px 0px #5c3a21;
+    margin-bottom: 40px;
 }
 
-.stat span {
-    color: #d9381e; /* Nhấn mạnh các con số bằng màu đỏ/cam */
-    font-size: 24px;
-}
-/* Kịch bản hiệu ứng rung lắc */
-@keyframes shake {
-    0% { transform: translateY(20px) rotate(0deg); }
-    25% { transform: translateY(20px) rotate(-10deg); }
-    50% { transform: translateY(20px) rotate(10deg); }
-    75% { transform: translateY(20px) rotate(-10deg); }
-    100% { transform: translateY(20px) rotate(0deg); }
+
+/* --- ANIMATION CHO MENU --- */
+/* 1. Nhún nhảy linh vật */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px) rotate(5deg); }
 }
 
-/* Class này sẽ được Nhóm 1 gọi ra khi còn 0.5s cuối */
-.mole.warning {
-    /* Gọi kịch bản 'shake' ở trên, chạy trong 0.2s và lặp lại liên tục (infinite) */
-    animation: shake 0.2s infinite; 
-    /* Đổi viền hoặc thêm bộ lọc màu đỏ cho nguy hiểm (tùy chọn) */
-    filter: drop-shadow(0 0 10px red);
+
+/* 2. Hiệu ứng đập nhịp tim cho nút bấm */
+.btn-pulse {
+    animation: pulse 1.5s infinite;
 }
-/* --- CÁC MÀN HÌNH --- */
+.btn-pulse.delay {
+    animation-delay: 0.2s; /* Nút thứ 2 đập trễ hơn 1 nhịp cho tự nhiên */
+}
+
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0px 10px 0px #8b1e0b; }
+    100% { transform: scale(1); }
+}
+
+
+/*______________________*/
+
+
 .screen {
     display: flex;
     flex-direction: column;
@@ -153,50 +121,222 @@ h1 {
     width: 100%;
 }
 
-/* Bất cứ cái gì có class "hidden" sẽ biến mất khỏi trang web */
 .hidden {
     display: none !important;
 }
 
-/* --- MÀN HÌNH MENU --- */
 #start-screen p {
     font-size: 24px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 30px;
-    margin-top: 20px;
+    margin: 20px 0 30px 0;
 }
 
 .menu-buttons {
     display: flex;
-    gap: 20px; /* Khoảng cách giữa 2 nút */
+    gap: 20px; 
 }
 
-/* Thiết kế Nút bấm (Button) phong cách game */
 .btn {
     padding: 15px 30px;
     font-size: 22px;
     font-weight: bold;
     color: white;
-    background-color: #d9381e; /* Màu đỏ cam */
-    border: 4px solid #5c3a21; /* Viền nâu đậm */
+    background-color: #d9381e; 
+    border: 4px solid #5c3a21; 
     border-radius: 12px;
-    cursor: pointer; /* Đổi thành hình bàn tay khi trỏ vào nút (nếu không dùng búa) */
-    box-shadow: 0px 6px 0px #8b1e0b; /* Tạo độ dày 3D cho nút */
-    transition: all 0.1s; /* Hiệu ứng mượt khi bấm */
+    cursor: pointer; 
+    box-shadow: 0px 6px 0px #8b1e0b; 
+    transition: all 0.1s; 
 }
 
-/* Hiệu ứng khi lướt chuột qua nút */
-.btn:hover {
-    background-color: #ff4a2b;
-}
-
-/* Hiệu ứng khi bấm nút xuống (như nút vật lý) */
+.btn:hover { background-color: #ff4a2b; }
 .btn:active {
-    transform: translateY(4px); /* Tụt xuống 4px */
-    box-shadow: 0px 2px 0px #8b1e0b; /* Bóng xẹp lại */
+    transform: translateY(4px); 
+    box-shadow: 0px 2px 0px #8b1e0b; 
 }
-/* --- TRANG ĐIỂM MÀN HÌNH GAME OVER --- */
+
+/* =========================================
+   3. BẢNG THÔNG SỐ (HUD BẢNG GỖ) & COMBO
+   ========================================= */
+#game-screen {
+    position: relative;
+    width: 100%;
+    
+    /* Bắt buộc game chỉ hiển thị trong 1 màn hình */
+    height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    /* BỎ justify-content: center đi, thay bằng padding-top để HUD cách trần một chút cho thoáng */
+    padding-top: 15px; 
+}
+
+/* --- BẢNG THÔNG SỐ (HUD BẢNG GỖ) --- */
+.hud {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 840px; /* Tăng độ rộng để cân bằng với Map to ở dưới */
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: linear-gradient(to bottom, #a05a2c, #6b3e18); 
+    border-radius: 15px;
+    border: 4px solid #3e2008;
+    box-shadow: 0px 6px 0px #2b1504, 0px 10px 15px rgba(0,0,0,0.3);
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.stat {
+    display: flex;
+    align-items: center; 
+    gap: 8px; 
+}
+
+.stat span {
+    color: #ffcc00; 
+    font-size: 28px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+#combo-box {
+    position: absolute;
+    top: 20px;
+    right: 50px; /* Ghim góc phải */
+    
+    background-color: #ffaa00; /* Màu cam nổi bật */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 4px solid #d9381e;
+    
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px 0px #d9381e; /* Đổ bóng 3D */
+    box-shadow: 0px 6px 0px #d9381e;
+    transform: rotate(10deg); /* Đặt hơi nghiêng cho giống game hành động */
+    z-index: 10;
+}
+#combo-box span { font-size: 45px; display: block; margin-top: 5px; }
+
+/* --- ANIMATION CHO COMBO --- */
+/* 1. Hiệu ứng đập nhịp tim liên tục */
+@keyframes heartbeat {
+    0% { transform: rotate(10deg) scale(1); }
+    15% { transform: rotate(10deg) scale(1.1); }
+    30% { transform: rotate(10deg) scale(1); }
+    45% { transform: rotate(10deg) scale(1.1); }
+    60% { transform: rotate(10deg) scale(1); }
+}
+
+/* Gắn nhịp tim vào Combo Box hiện tại (Bổ sung vào #combo-box cũ) */
+#combo-box {
+    /* ... giữ nguyên các code cũ của bạn ... */
+    animation: heartbeat 1.5s infinite; /* Thêm dòng này */
+}
+
+/* 2. Hiệu ứng nảy mạnh (Pop) khi ghi điểm Combo */
+/* Nhóm 1 (Backend) sẽ gọi class này bằng JS mỗi khi combo tăng */
+.combo-pop {
+    animation: pop 0.3s ease-out !important;
+}
+
+@keyframes pop {
+    0% { transform: rotate(10deg) scale(1); }
+    50% { transform: rotate(10deg) scale(1.5); color: #fff4c2; } /* Phóng to 1.5 lần và nháy sáng */
+    100% { transform: rotate(10deg) scale(1); }
+}
+
+/* =========================================
+   4. KHU VỰC ĐẬP CHUỘT (GAME BOARD)
+   ========================================= */
+.game-board {
+    display: grid;
+    /* Phóng to hộp 4x4 lên 180px, khoảng cách dãn ra cho thoáng màn hình to */
+    grid-template-columns: repeat(4, 170px); 
+    gap: 40px; 
+    justify-content: center; 
+    
+    margin-top: 40px; /* Cho map thoáng trên màn hình single-page */
+}
+
+/* KHÔI PHỤC HỘP GỖ PIXEL ART XỊN */
+.hole {
+    width: 180px;
+    height: 248px; /* Nới trần nhà cao lên thêm 60px để chứa mũ chuột */
+    
+    background-image: url('../assets/ui_box.png'); 
+    background-size: 180px 180px; /* KHÔNG dùng 100% nữa, ép hộp gỗ cố định 180px */
+    background-position: bottom center; /* Ghim cái hộp gỗ xuống dưới đáy khung */
+    background-repeat: no-repeat;
+    
+    position: relative; 
+    overflow: hidden; /* Vẫn giữ để cắt phần thân khi chuột thụt xuống */
+    z-index: 1; 
+}
+/* CON CHUỘT NẰM TRONG HỘP - SỬA LẠI VỊ TRÍ VÀ KÍCH THƯỚC */
+.mole {
+    position: absolute;
+    bottom: 30px; 
+    left: 50%; 
+    
+    /* Trả height về auto để chuột không bị méo, chỉ chỉnh độ to bằng width */
+    width: 85%; /* Chuột to ra, lấp đầy miệng hộp */
+    height: 127%; 
+    
+    object-fit: contain; 
+    image-rendering: pixelated; 
+    
+    transform-origin: bottom center; 
+    /* Đạp sâu xuống 150% vì trần nhà (.hole) giờ đã cao hơn */
+    transform: translate(-50%, 110%); 
+    
+    transition: transform 0.2s ease-out; 
+    pointer-events: none; 
+    z-index: 5;
+}
+
+.mole.up {
+    /* Khi chuột nhô lên: về lại vị trí bottom: 30px */
+    transform: translate(-50%, 0); 
+    pointer-events: auto; 
+}
+/* Map 3 (Lưới 5x5) */
+.game-board.map3 {
+    grid-template-columns: repeat(5, 140px); /* 5 cột, mỗi lỗ nhỏ lại (140px) */
+    gap: 25px; 
+}
+.game-board.map3 .hole { width: 140px; height: 140px; }
+/* =========================================
+   5. HIỆU ỨNG (ANIMATIONS)
+   ========================================= */
+@keyframes shake {
+    0% { transform: translate(0) rotate(0deg); }
+    25% { transform: translate(0) rotate(-10deg); }
+    50% { transform: translate(0) rotate(10deg); }
+    75% { transform: translate(0) rotate(-10deg); }
+    100% { transform: translate(0) rotate(0deg); }
+}
+
+.mole.warning {
+    animation: shake 0.2s infinite; 
+    filter: drop-shadow(0 0 10px red);
+}
+
+.mole.hit {
+    transform: translate(20px) scaleY(0.5); 
+    pointer-events: none; 
+    filter: brightness(0.8);
+}
+
+/* =========================================
+   6. MÀN HÌNH GAME OVER & BẢNG DEBUFF
+   ========================================= */
 #game-over-screen h2 {
     font-size: 60px;
     color: #d9381e;
@@ -212,55 +352,25 @@ h1 {
     margin-bottom: 40px;
 }
 
-/* --- HIỆU ỨNG KHI ĐẬP TRÚNG CHUỘT --- */
-/* Nhóm 1 sẽ thêm class này bằng JavaScript khi người chơi click trúng con chuột */
-.mole.hit {
-    /* Ép con chuột lùn xuống một nửa để tạo cảm giác bị búa gõ bẹp */
-    transform: translateY(20px) scaleY(0.5); 
-    /* Dừng mọi click khác để tránh đập 1 con 2 lần */
-    pointer-events: none; 
-    /* Có thể dùng bộ lọc để chuột hơi tối lại khi bị choáng */
-    filter: brightness(0.8);
-}
-
-
-
-/* Chuẩn bị sẵn các class đổi nền để Nhóm 1 gọi ra bằng JavaScript */
-body.menu-bg {
-    background-image: url('../assets/bg_menu.png'); /* Chờ Nhóm 4 gửi ảnh này */
-}
-
-body.game-bg {
-    background-image: url('../assets/bg_main.png'); /* Ảnh nền chơi game hiện tại */
-}
-
-body.gameover-bg {
-    background-image: url('../assets/bg_gameover.png'); /* Chờ Nhóm 4 gửi ảnh này */
-}
-
-
-
-/* --- BẢNG DEBUFF POP-UP --- */
-/* Lớp phủ đen mờ toàn màn hình để người chơi tập trung chọn thẻ */
 .modal-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100; /* Đảm bảo nó nổi lên trên cùng */
+    z-index: 100; 
 }
 
 .debuff-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 20px;
-    border: 5px solid #5c3a21;
+    background-image: url('../assets/ui_box.png');
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    background-color: transparent; 
+    border: none; 
+    padding: 60px 50px; 
     text-align: center;
+    image-rendering: pixelated; 
 }
 
 .debuff-container h2 {
@@ -268,16 +378,14 @@ body.gameover-bg {
     margin-bottom: 20px;
 }
 
-/* Khu vực chứa 3 tấm thẻ */
 .debuff-cards {
     display: flex;
     gap: 20px;
 }
 
-/* Giao diện từng thẻ Debuff */
 .card {
     width: 200px;
-    background-color: #fce7b1; /* Nền vàng nhạt */
+    background-color: #fce7b1; 
     border: 3px solid #d9381e;
     border-radius: 15px;
     padding: 20px 10px;
@@ -286,7 +394,7 @@ body.gameover-bg {
 }
 
 .card:hover {
-    transform: translateY(-10px); /* Bấm hụt thẻ bay lên một xíu */
+    transform: translateY(-10px); 
     box-shadow: 0px 10px 15px rgba(0,0,0,0.3);
     background-color: #fff3d1;
 }
@@ -300,15 +408,317 @@ body.gameover-bg {
     font-size: 16px;
     color: #333;
     margin-bottom: 15px;
-    height: 60px; /* Cố định chiều cao cho chữ khỏi xô lệch */
+    height: 60px; 
 }
 
 .card .bonus {
     display: inline-block;
-    background-color: #4CAF50; /* Nhãn màu xanh */
+    background-color: #4CAF50; 
     color: white;
     padding: 5px 10px;
     border-radius: 8px;
     font-weight: bold;
     font-size: 14px;
+}
+
+
+/* --- ICON MẠNG (TRÁI TIM PIXEL) --- */
+.life-icon {
+    width: 40px; /* Chỉnh kích thước icon to nhỏ ở đây */
+    height: auto;
+    margin-left: 5px; /* Khoảng cách giữa các tim */
+    vertical-align: middle; /* Căn cho icon nằm ngang hàng với chữ */
+    image-rendering: pixelated; /* Giữ độ nét cho ảnh pixel */
+    transition: all 0.3s; /* Tạo hiệu ứng mượt khi bị mất mạng */
+}
+
+
+
+
+ /* 4. TRANG TRÍ MÀN HÌNH XUNG QUANH BẰNG CHUỘT LƠ LỬNG */
+#start-screen {
+    position: relative; /* Neo để đặt đồ trang trí */
+}
+
+
+#start-screen::before, #start-screen::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    image-rendering: pixelated;
+    opacity: 0.8; /* Làm mờ nhẹ đi một chút */
+    z-index: 1; /* Nằm dưới menu chính */
+    animation: floatBackground 4s ease-in-out infinite alternate;
+}
+
+
+/* Trang trí góc dưới bên trái: Bé chuột thường */
+#start-screen::before {
+    bottom: 5vh;
+    left: 8vw;
+    background-image: url('../assets/images/hamster_normal.png');
+    transform: rotate(-10deg);
+}
+
+
+/* Trang trí góc trên bên phải: Bé chuột đội mũ */
+#start-screen::after {
+    top: 10vh;
+    right: 8vw;
+    background-image: url('../assets/images/hamster_heart.png');
+    transform: rotate(15deg);
+    animation-delay: 1.5s; /* Bay so le nhịp cho tự nhiên */
+}
+
+
+
+
+@keyframes floatBackground {
+    0% { transform: translateY(0) rotate(-10deg) scale(1); }
+    100% { transform: translateY(-40px) rotate(10deg) scale(1.05); }
+}
+
+
+/* --- PHẦN DECOR CHUỘT THÊM VÀO --- */
+.extra-hamsters {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; /* Để không bị vướng khi bấm nút game */
+    z-index: 1; /* Nằm dưới Menu Board */
+}
+
+
+.mini-float {
+    position: absolute;
+    image-rendering: pixelated;
+    animation: floatUpDown 3s ease-in-out infinite alternate;
+}
+
+
+/* Định vị các con chuột mới vào chỗ trống */
+.m1 { bottom: 10%; left: 5%; width: 120px; }            /* Dưới - Trái */
+.m2 { bottom: 10%; right: 5%; width: 130px; animation-delay: 0.5s; } /* Dưới - Phải */
+.m3 { bottom: 5%; left: 50%; transform: translateX(-50%); width: 100px; animation-delay: 1s; } /* Dưới - Chính giữa */
+.m4 { top: 15%; left: 10%; width: 90px; opacity: 0.7; }  /* Trên - Trái (mờ nhẹ) */
+.m5 { top: 15%; right: 10%; width: 90px; opacity: 0.7; animation-delay: 1.5s; } /* Trên - Phải */
+
+
+/* Hiệu ứng bay cho bầy chuột mới */
+@keyframes floatUpDown {
+    from { transform: translate(var(--tw-translate-x, 0), 0); }
+    to { transform: translate(var(--tw-translate-x, 0), -30px); }
+}
+
+
+/* Lưu ý: con m3 cần giữ translateX để căn giữa nên tui dùng biến để không bị ghi đè */
+.m3 { --tw-translate-x: -50%; }
+
+
+/* Phía sườn trái */
+.m6 { top: 40%; left: 2%; width: 110px; animation-delay: 0.2s; }
+.m7 { top: 70%; left: 15%; width: 90px; animation-delay: 0.8s; opacity: 0.8; }
+
+
+/* Phía sườn phải */
+.m8 { top: 45%; right: 3%; width: 115px; animation-delay: 1.2s; }
+.m9 { top: 75%; right: 18%; width: 95px; animation-delay: 0.4s; opacity: 0.8; }
+
+
+/* Thêm một con lấp ló ở trên đỉnh chính giữa */
+.m10 { top: 2%; left: 50%; transform: translateX(-50%); width: 100px; animation-delay: 1.8s; }
+
+
+/* Hiệu ứng xoay nhẹ cho một vài con để nhìn tự nhiên hơn */
+.m2, .m4, .m8 { --tw-rotate: 15deg; }
+.m1, .m6, .m9 { --tw-rotate: -15deg; }
+
+
+/* Cập nhật Keyframes để nhận diện cả xoay và bay */
+@keyframes floatUpDown {
+    from {
+        transform: translateX(var(--tw-translate-x, 0)) translateY(0) rotate(var(--tw-rotate, 0));
+    }
+    to {
+        transform: translateX(var(--tw-translate-x, 0)) translateY(-30px) rotate(var(--tw-rotate, 0));
+    }
+}
+
+
+/* Con m11: Lấp ló góc dưới TRÁI của cái hộp menu */
+.m11 {
+    top: 60%;
+    left: 20%;
+    width: 100px;
+    animation-duration: 4.5s;
+    animation-delay: 0.3s;
+}
+
+
+/* Con m12: Lấp ló góc dưới PHẢI của cái hộp menu */
+.m12 {
+    top: 65%;
+    right: 20%;
+    width: 110px;
+    animation-duration: 5s;
+    animation-delay: 0.7s;
+    opacity: 0.8; /* Làm mờ nhẹ một chút */
+}
+
+
+/* Con m13: Nằm CHÍNH GIỮA, ngay dưới gầm 2 cái nút bấm */
+.m13 {
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%); /* Căn chuẩn chính giữa */
+    width: 90px;
+    animation-duration: 4s;
+    animation-delay: 1.1s;
+    --tw-rotate: 15deg; /* Cho nó hơi nghiêng tạo cảm giác đang 'reo hò' */
+}
+
+
+/* Con m14: Chú chuột đội mũ, bay cao nhất góc bên phải */
+.m14 {
+    top: 5%;
+    right: 5%;
+    width: 100px;
+    animation-duration: 4s;
+    animation-delay: 0.2s;
+    --tw-rotate: 15deg; /* Hơi nghiêng phải cho tự nhiên */
+}
+
+
+/* Con m15: Chú chuột cứu thương, bay lơ lửng sườn bên phải của Menu Board */
+.m15 {
+    top: 25%;
+    right: 15%;
+    width: 90px;
+    animation-duration: 4.5s;
+    animation-delay: 0.6s;
+    opacity: 0.8; /* Làm mờ nhẹ */
+    --tw-rotate: -10deg; /* Hơi nghiêng trái */
+}
+
+
+/* Con m16: Nằm bên TRÁI cụm nút */
+.m16 {
+    top: 78%;
+    left: 32%;
+    width: 85px;
+    animation-duration: 3.8s;
+    --tw-rotate: -20deg;
+}
+
+
+/* Con m17: Nằm bên PHẢI cụm nút */
+.m17 {
+    top: 78%;
+    right: 32%;
+    width: 85px;
+    animation-duration: 4.2s;
+    animation-delay: 0.5s;
+    --tw-rotate: 20deg;
+}
+
+
+/* Con m18: Nằm dưới nút 'Chế độ Thường' một chút */
+.m18 {
+    top: 85%;
+    left: 42%;
+    width: 75px;
+    animation-duration: 5s;
+    opacity: 0.9;
+}
+
+
+/* Con m19: Nằm dưới nút 'Chế độ Vô Hạn' một chút */
+.m19 {
+    top: 85%;
+    right: 42%;
+    width: 80px;
+    animation-duration: 4.6s;
+    animation-delay: 0.3s;
+}
+
+
+/* Con m20: Lơ lửng bên trái Mascot chính */
+.m20 {
+    top: 5%;
+    left: 35%;
+    width: 80px;
+    animation-duration: 4.8s;
+    --tw-rotate: -10deg;
+}
+
+
+/* Con m21: Lơ lửng bên phải Mascot chính */
+.m21 {
+    top: 5%;
+    right: 35%;
+    width: 85px;
+    animation-duration: 5.2s;
+    animation-delay: 0.4s;
+    --tw-rotate: 10deg;
+}
+
+
+/* Con m22: Bay cao hẳn lên ở phía trên bên trái tiêu đề */
+.m22 {
+    top: 2%;
+    left: 22%;
+    width: 75px;
+    animation-duration: 4s;
+    opacity: 0.8;
+}
+
+
+/* Con m23: Bay cao hẳn lên ở phía trên bên phải tiêu đề */
+.m23 {
+    top: 2%;
+    right: 22%;
+    width: 75px;
+    animation-duration: 4.3s;
+    animation-delay: 0.2s;
+    opacity: 0.8;
+}
+
+
+
+
+/* --- NÚT INFO (CHẤM THAN) GÓC TRÁI --- */
+.btn-icon {
+    position: absolute;
+    top: 20px;
+    left: 40px; /* Đặt ở góc trái để không đụng Combo ở góc phải */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #4CAF50; /* Màu xanh lá nổi bật */
+    border: 4px solid #1b5e20;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 6px 0px #1b5e20;
+    z-index: 100; /* Nổi lên trên cùng */
+    transition: all 0.1s;
+}
+
+.btn-icon:active {
+    transform: translateY(4px);
+    box-shadow: 0px 2px 0px #1b5e20;
+}
+
+/* Định dạng chữ trong bảng Thể lệ */
+.rules-text {
+    text-align: left;
+    font-size: 20px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 30px;
 }
