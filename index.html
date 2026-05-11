@@ -1,172 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whack A Mole</title>
-    
-    <!-- Liên kết với file CSS (đặt trong thẻ head) -->
-    <link rel="stylesheet" href="css/style.css">
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>🔨 Đập Chuột!</title>
+     <link rel="stylesheet" href="./css/style.css" />
+     <link rel="stylesheet" href="./css/style-extra.css" />
 </head>
-<body>
-    
-    <h1>Game Đập Chuột</h1>
-    
-    <!-- 1. MÀN HÌNH MENU BẮT ĐẦU -->
-    <div id="start-screen" class="screen ">
-        <p>Hãy chọn chế độ chơi để bắt đầu!</p>
-        <div class="menu-buttons">
-            <button id="btn-normal" class="btn">Chế độ Thường</button>
-            <button id="btn-endless" class="btn">Chế độ Vô Hạn</button>
-        </div>
-    </div>
-    <!-- 2. MÀN HÌNH CHƠI GAME (Bao gồm HUD và lưới chuột) -->
-    <!-- Thêm class "hidden" để tạm thời giấu nó đi -->
-    <div id="game-screen" class="screen hidden ">
-    
-        <!-- Bảng thông số trò chơi (HUD) -->
-        <div class="hud">
-            <div class="stat">Điểm: <span id="score">0</span></div>
-            <div class="stat">Combo: <span id="combo" style="color: #ffaa00;">0</span>x</div>
-            <div class="stat">Thời gian: <span id="time">120</span>s</div>
-            <div class="stat">Mạng: <span id="lives">❤️❤️❤️❤️❤️</span></div>
-        </div>
-        <!-- Khung chứa toàn bộ lưới 4x4 -->
-        <div class="game-board">
-             <!-- Lỗ 1 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 2 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 3 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 4 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 5 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 6 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 7 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <!-- Lỗ 8 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 9 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 10 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 11 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 12 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 13 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <!-- Lỗ 14 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 15 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-             <!-- Lỗ 16 -->
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
 
+<body class="menu-bg">
 
-        <!--
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-            <div class="hole">
-                 <img src="assets/hamster_helmet.png" class="mole" alt="Chuột">
-            </div>
-        -->
-        </div>
-    
-        <!-- BẢNG CHỌN DEBUFF CHO CHẾ ĐỘ VÔ HẠN -->
-        <!-- Mặc định có class hidden để giấu đi, chờ 60s Nhóm 1 mới gọi ra -->
-        <div id="debuff-modal" class="modal-overlay hidden">
-            <div class="debuff-container">
-                <h2>CHỌN 1 HIỆU ỨNG DEBUFF!</h2>
-                <div class="debuff-cards">
-                    <!-- Thẻ số 1 -->
-                    <div class="card">
-                        <h3>Tăng tốc Spawn</h3>
-                        <p>Giảm 0.2s thời gian ra chuột.</p>
-                        <span class="bonus">Điểm x2</span>
-                    </div>
-                    <!-- Thẻ số 2 -->
-                    <div class="card">
-                        <h3>Mở rộng Map</h3>
-                        <p>Map rộng thêm 1 hàng, 1 cột.</p>
-                        <span class="bonus">Điểm x1.5</span>
-                    </div>
-                    <!-- Thẻ số 3 -->
-                    <div class="card">
-                        <h3>Tăng máu Quái</h3>
-                        <p>Máu của chuột tăng thêm 1.</p>
-                        <span class="bonus">+1 Điểm</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+     <!-- ===== TIÊU ĐỀ ===== -->
+     <h1>🔨 Đập Chuột!</h1>
 
-    </div>
-    
-    <div id="game-over-screen" class="screen hidden">
-        <h2>HẾT GIỜ!</h2>
-        <p>Tổng điểm của bạn: <span id="final-score" style="color: #d9381e; font-size: 40px;">0</span></p>
-        <button id="btn-restart" class="btn">Chơi Lại Từ Đầu</button>
-    </div>
-    
-    <!-- Liên kết với file JS (Luôn đặt ở sát trên cùng của thẻ đóng body) -->
-    <script src="js/main.js"></script>
+     <!-- ===== HUD (ẩn lúc đầu) ===== -->
+     <div class="hud hidden" id="hud">
+          <div class="stat">⭐ Điểm: <span id="score-value">0</span></div>
+          <div class="stat">⏰ Thời gian: <span id="time-value">01:00</span></div>
+          <div class="stat">❤️ Mạng: <span id="lives-value">❤️❤️❤️</span></div>
+     </div>
+
+     <!-- ===== MÀN HÌNH MENU ===== -->
+     <div id="start-screen" class="screen">
+          <p>Chọn bản đồ để bắt đầu!</p>
+          <div class="menu-buttons">
+               <button class="btn" id="btn-map1">🌿 Map 1<br /><small>Dễ – 4×4</small></button>
+               <button class="btn" id="btn-map2">🔥 Map 2<br /><small>Khó – 4×4</small></button>
+               <button class="btn" id="btn-map3">💀 Map 3<br /><small>Địa Ngục – 5×5</small></button>
+          </div>
+     </div>
+
+     <!-- ===== MÀN HÌNH CHƠI GAME ===== -->
+     <div id="game-screen" class="screen hidden">
+          <div class="game-board" id="game-board">
+               <!-- Các lỗ chuột sẽ được tạo tự động bởi JS (LevelSystem.buildBoard) -->
+          </div>
+     </div>
+
+     <!-- ===== MÀN HÌNH GAME OVER ===== -->
+     <div id="game-over-screen" class="screen hidden">
+          <h2>GAME OVER</h2>
+          <p>Điểm của bạn: <span id="final-score">0</span></p>
+
+          <!-- Thống kê chi tiết -->
+          <div id="game-summary" class="game-summary"></div>
+
+          <div class="menu-buttons" style="margin-top: 30px;">
+               <button class="btn" id="btn-restart">🔄 Chơi lại</button>
+               <button class="btn" id="btn-menu">🏠 Menu</button>
+          </div>
+     </div>
+
+     <!-- ===== BẢNG DEBUFF (popup chọn thử thách) ===== -->
+     <div class="modal-overlay hidden" id="debuff-modal">
+          <div class="debuff-container">
+               <h2>⚠️ Chọn Thử Thách!</h2>
+               <p style="margin-bottom:16px; color:#555;">Chọn 1 debuff để nhận thưởng!</p>
+               <div class="debuff-cards" id="debuff-cards">
+                    <!-- 3 thẻ debuff sẽ được tạo bởi JS (game.js _renderDebuffCards) -->
+               </div>
+          </div>
+     </div>
+
+     <!-- ===== SCRIPT (ES Modules) ===== -->
+     <script type="module" src="js/main.js"></script>
 </body>
+
 </html>
