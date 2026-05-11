@@ -44,7 +44,10 @@ export class LevelSystem {
    * @returns {Mole[]}
    */
   buildBoard(boardEl, levelConfig) {
-    // Xoá bảng cũ
+    boardEl.style.gridTemplateColumns =
+      `repeat(${levelConfig.cols}, 1fr)`;
+    boardEl.style.gridTemplateRows =
+      `repeat(${levelConfig.rows}, 1fr)`;
     boardEl.innerHTML = '';
     boardEl.className = 'game-board';
     this.moles = [];

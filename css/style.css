@@ -42,15 +42,11 @@ h1 {
 /* Thiết lập lưới 4x4 cho Map 1 */
 .game-board {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  /* Chia làm 4 cột bằng nhau */
   gap: 30px;
   /* Khoảng cách giữa các lỗ */
   margin-top: 50px;
   /* Cách tiêu đề một khoảng */
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.1);
-  /* Tạo một mảng nền hơi tối cho nguyên khu vực đập chuột */
   border-radius: 15px;
 }
 
@@ -79,9 +75,7 @@ h1 {
 .hole {
   width: 150px;
   height: 150px;
-  background-color: #5c3a21;
   background: url("../assets/ui_box.png") no-repeat center/contain;
-  border-radius: 50%;
   /* Cắt thành hình tròn/oval */
 
   /* Các thuộc tính quan trọng để làm animation sau này */
@@ -95,12 +89,11 @@ h1 {
   align-items: flex-end;
 
   /* Tạo hiệu ứng bóng đổ cho lỗ có chiều sâu */
-  box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.5);
 }
 
 /* Chỉnh kích thước và giấu chuột đi */
 .mole {
-  width: 100px;
+  width: 20000000000000px;
   /* Đẩy con chuột tụt hẳn xuống dưới đáy lỗ (100% chiều cao của nó) */
   transform: translateY(100%);
 
@@ -448,6 +441,7 @@ body.gameover-bg {
 
 /* --- BOM NHẤP NHÁY --- */
 @keyframes bomb-pulse-anim {
+
   0%,
   100% {
     filter: drop-shadow(0 0 4px orange);
@@ -488,6 +482,7 @@ body.life-lost-flash {
 
 /* --- TIMER ĐỎ NHẤP NHÁY KHI SẮP HẾT GIỜ --- */
 @keyframes pulse-red {
+
   0%,
   100% {
     opacity: 1;

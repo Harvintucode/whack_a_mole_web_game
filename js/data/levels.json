@@ -7,10 +7,13 @@
       "cols": 4,
       "rows": 4,
       "duration": 60,
-      "maxActiveMoles": 2,
+      "maxActiveMoles": 1,
       "spawnInterval": 1200,
-      "speedMultiplier": 1.0,
-      "allowedTypes": ["normal", "fast"],
+      "speedMultiplier": 0.15,
+      "allowedTypes": [
+        "normal",
+        "fast"
+      ],
       "bombWeight": 0,
       "debuffTriggerScore": 50,
       "bgClass": "game-bg"
@@ -22,10 +25,15 @@
       "cols": 4,
       "rows": 4,
       "duration": 60,
-      "maxActiveMoles": 3,
+      "maxActiveMoles": 1,
       "spawnInterval": 900,
-      "speedMultiplier": 1.3,
-      "allowedTypes": ["normal", "fast", "tough", "golden"],
+      "speedMultiplier": 0.30,
+      "allowedTypes": [
+        "normal",
+        "fast",
+        "tough",
+        "golden"
+      ],
       "bombWeight": 3,
       "debuffTriggerScore": 60,
       "bgClass": "game-bg"
@@ -37,10 +45,16 @@
       "cols": 5,
       "rows": 5,
       "duration": 90,
-      "maxActiveMoles": 5,
+      "maxActiveMoles": 2,
       "spawnInterval": 700,
-      "speedMultiplier": 1.6,
-      "allowedTypes": ["normal", "fast", "tough", "golden", "bomb"],
+      "speedMultiplier": 0.5,
+      "allowedTypes": [
+        "normal",
+        "fast",
+        "tough",
+        "golden",
+        "bomb"
+      ],
       "bombWeight": 8,
       "debuffTriggerScore": 70,
       "bgClass": "game-bg"
