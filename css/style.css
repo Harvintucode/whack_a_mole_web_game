@@ -1,369 +1,371 @@
 /* Xóa các khoảng trắng mặc định của trình duyệt */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    /* Thêm hình nền bg_main.png */
-    background-image: url('../assets/bg_main.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
+  /* Thêm hình nền bg_main.png */
+  background-image: url("../assets/bg_main.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
 
-    /* Căn giữa chữ và nội dung */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, sans-serif;
+  /* Căn giữa chữ và nội dung */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
 
-    /* Đổi con trỏ chuột mặc định thành hình cái búa */
-    cursor: url('../assets/hammer_icon.png') 32 32, auto;
+  /* Đổi con trỏ chuột mặc định thành hình cái búa */
+  cursor:
+    url("../assets/hammer_icon.png") 32 32,
+    auto;
 }
 
 /* Khi người chơi bấm chuột (click) thì đổi sang hình búa đang đập */
 body:active {
-    cursor: url('../assets/hammer_slamicon.png') 32 32, auto;
+  cursor:
+    url("../assets/hammer_slamicon.png") 32 32,
+    auto;
 }
 
 h1 {
-    margin-top: 20px;
-    color: #333;
-    text-shadow: 2px 2px 0px #fff;
-    /* Tạo viền trắng cho chữ dễ đọc trên nền vàng */
+  margin-top: 20px;
+  color: #333;
+  text-shadow: 2px 2px 0px #fff;
+  /* Tạo viền trắng cho chữ dễ đọc trên nền vàng */
 }
 
 /* Thiết lập lưới 4x4 cho Map 1 */
 .game-board {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    /* Chia làm 4 cột bằng nhau */
-    gap: 30px;
-    /* Khoảng cách giữa các lỗ */
-    margin-top: 50px;
-    /* Cách tiêu đề một khoảng */
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.1);
-    /* Tạo một mảng nền hơi tối cho nguyên khu vực đập chuột */
-    border-radius: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* Chia làm 4 cột bằng nhau */
+  gap: 30px;
+  /* Khoảng cách giữa các lỗ */
+  margin-top: 50px;
+  /* Cách tiêu đề một khoảng */
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Tạo một mảng nền hơi tối cho nguyên khu vực đập chuột */
+  border-radius: 15px;
 }
 
 /* --- BẢN ĐỒ MAP 3 (5x5) --- */
 /* Khi thẻ game-board được gắn thêm class map3, nó sẽ ghi đè các thuộc tính cũ */
 .game-board.map3 {
-    grid-template-columns: repeat(5, 1fr);
-    /* Đổi thành 5 cột */
-    gap: 15px;
-    /* Thu hẹp khoảng cách để nhét vừa 25 lỗ */
-    width: 650px;
-    /* Nới rộng bảng ra một xíu */
+  grid-template-columns: repeat(5, 1fr);
+  /* Đổi thành 5 cột */
+  gap: 15px;
+  /* Thu hẹp khoảng cách để nhét vừa 25 lỗ */
+  width: 650px;
+  /* Nới rộng bảng ra một xíu */
 }
 
 /* Thu nhỏ các lỗ và chuột lại một chút để không bị tràn màn hình */
 .game-board.map3 .hole {
-    width: 80px;
-    height: 80px;
+  width: 80px;
+  height: 80px;
 }
 
 .game-board.map3 .mole {
-    width: 60px;
+  width: 60px;
 }
 
 /* Vẽ hình cái lỗ chuột bằng CSS */
 .hole {
-    width: 100px;
-    height: 100px;
-    background-color: #5c3a21;
-    background: url('../assets/ui_box.png') no-repeat center/contain;
-    border-radius: 50%;
-    /* Cắt thành hình tròn/oval */
+  width: 150px;
+  height: 150px;
+  background-color: #5c3a21;
+  background: url("../assets/ui_box.png") no-repeat center/contain;
+  border-radius: 50%;
+  /* Cắt thành hình tròn/oval */
 
-    /* Các thuộc tính quan trọng để làm animation sau này */
-    position: relative;
-    overflow: hidden;
-    /* Cực kỳ quan trọng: Bất cứ thứ gì thò ra ngoài hình tròn này sẽ bị cắt mất (giúp chuột giấu mình) */
+  /* Các thuộc tính quan trọng để làm animation sau này */
+  position: relative;
+  overflow: hidden;
+  /* Cực kỳ quan trọng: Bất cứ thứ gì thò ra ngoài hình tròn này sẽ bị cắt mất (giúp chuột giấu mình) */
 
-    /* Căn cho chuột nằm ở sát đáy lỗ */
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+  /* Căn cho chuột nằm ở sát đáy lỗ */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 
-    /* Tạo hiệu ứng bóng đổ cho lỗ có chiều sâu */
-    box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.5);
+  /* Tạo hiệu ứng bóng đổ cho lỗ có chiều sâu */
+  box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.5);
 }
 
 /* Chỉnh kích thước và giấu chuột đi */
 .mole {
-    width: 14000000px;
-    /* Đẩy con chuột tụt hẳn xuống dưới đáy lỗ (100% chiều cao của nó) */
-    transform: translateY(100%);
+  width: 20000000000000px;
+  /* Đẩy con chuột tụt hẳn xuống dưới đáy lỗ (100% chiều cao của nó) */
+  transform: translateY(100%);
 
-    /* Tạo hiệu ứng trượt lên/xuống mượt mà trong 0.3 giây */
-    transition: transform 0.3s ease-out;
+  /* Tạo hiệu ứng trượt lên/xuống mượt mà trong 0.3 giây */
+  transition: transform 0.5s ease-out;
 
-    /* Chặn người chơi click trúng chuột khi nó chưa trồi lên hẳn */
-    pointer-events: none;
+  /* Chặn người chơi click trúng chuột khi nó chưa trồi lên hẳn */
+  pointer-events: none;
 }
 
 /* Class này sẽ được Nhóm 1 (Logic) dùng JS để thêm vào khi muốn chuột hiện lên */
 .mole.up {
-    /* Kéo con chuột trở lại vị trí nhô lên */
-    transform: translateY(20px);
-    /* Cho phép click (đập) khi chuột đã trồi lên */
-    pointer-events: auto;
+  /* Kéo con chuột trở lại vị trí nhô lên */
+  transform: translateY(10px);
+  /* Cho phép click (đập) khi chuột đã trồi lên */
+  pointer-events: auto;
 }
 
 /* Bảng thông số (Điểm, Thời gian, Mạng) */
 .stat {
-    display: flex;
-    align-items: center;
-    /* Căn giữa chữ và icon/số theo chiều dọc */
-    gap: 8px;
-    /* Thêm một chút khoảng cách giữa chữ và số/tim cho thoáng */
+  display: flex;
+  align-items: center;
+  /* Căn giữa chữ và icon/số theo chiều dọc */
+  gap: 8px;
+  /* Thêm một chút khoảng cách giữa chữ và số/tim cho thoáng */
 }
 
 .hud {
-    display: flex;
-    justify-content: space-between;
-    /* Đẩy 3 thông số ra xa nhau */
-    width: 650px;
-    /* Bằng với chiều rộng dự kiến của bảng game */
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.8);
-    /* Nền trắng hơi trong suốt */
-    border-radius: 10px;
-    border: 3px solid #5c3a21;
-    /* Viền màu nâu đồng bộ với lỗ chuột */
-    box-shadow: 0px 4px 0px #5c3a21;
-    /* Đổ bóng tạo cảm giác 3D */
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
+  display: flex;
+  justify-content: space-between;
+  /* Đẩy 3 thông số ra xa nhau */
+  width: 650px;
+  /* Bằng với chiều rộng dự kiến của bảng game */
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Nền trắng hơi trong suốt */
+  border-radius: 10px;
+  border: 3px solid #5c3a21;
+  /* Viền màu nâu đồng bộ với lỗ chuột */
+  box-shadow: 0px 4px 0px #5c3a21;
+  /* Đổ bóng tạo cảm giác 3D */
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
 }
 
 .stat span {
-    color: #d9381e;
-    /* Nhấn mạnh các con số bằng màu đỏ/cam */
-    font-size: 24px;
+  color: #d9381e;
+  /* Nhấn mạnh các con số bằng màu đỏ/cam */
+  font-size: 24px;
 }
 
 /* Kịch bản hiệu ứng rung lắc */
 @keyframes shake {
-    0% {
-        transform: translateY(20px) rotate(0deg);
-    }
+  0% {
+    transform: translateY(10px) rotate(0deg);
+  }
 
-    25% {
-        transform: translateY(20px) rotate(-10deg);
-    }
+  25% {
+    transform: translateY(10px) rotate(-10deg);
+  }
 
-    50% {
-        transform: translateY(20px) rotate(10deg);
-    }
+  50% {
+    transform: translateY(10px) rotate(10deg);
+  }
 
-    75% {
-        transform: translateY(20px) rotate(-10deg);
-    }
+  75% {
+    transform: translateY(10px) rotate(-10deg);
+  }
 
-    100% {
-        transform: translateY(20px) rotate(0deg);
-    }
+  100% {
+    transform: translateY(10px) rotate(0deg);
+  }
 }
 
 /* Class này sẽ được Nhóm 1 gọi ra khi còn 0.5s cuối */
 .mole.warning {
-    /* Gọi kịch bản 'shake' ở trên, chạy trong 0.2s và lặp lại liên tục (infinite) */
-    animation: shake 0.2s infinite;
-    /* Đổi viền hoặc thêm bộ lọc màu đỏ cho nguy hiểm (tùy chọn) */
-    filter: drop-shadow(0 0 10px red);
+  /* Gọi kịch bản 'shake' ở trên, chạy trong 0.2s và lặp lại liên tục (infinite) */
+  animation: shake 0.2s infinite;
+  /* Đổi viền hoặc thêm bộ lọc màu đỏ cho nguy hiểm (tùy chọn) */
+  filter: drop-shadow(0 0 10px red);
 }
 
 /* --- CÁC MÀN HÌNH --- */
 .screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 /* Bất cứ cái gì có class "hidden" sẽ biến mất khỏi trang web */
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 /* --- MÀN HÌNH MENU --- */
 #start-screen p {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 30px;
-    margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+  margin-top: 20px;
 }
 
 .menu-buttons {
-    display: flex;
-    gap: 20px;
-    /* Khoảng cách giữa 2 nút */
+  display: flex;
+  gap: 20px;
+  /* Khoảng cách giữa 2 nút */
 }
 
 /* Thiết kế Nút bấm (Button) phong cách game */
 .btn {
-    padding: 15px 30px;
-    font-size: 22px;
-    font-weight: bold;
-    color: white;
-    background-color: #d9381e;
-    /* Màu đỏ cam */
-    border: 4px solid #5c3a21;
-    /* Viền nâu đậm */
-    border-radius: 12px;
-    cursor: pointer;
-    /* Đổi thành hình bàn tay khi trỏ vào nút (nếu không dùng búa) */
-    box-shadow: 0px 6px 0px #8b1e0b;
-    /* Tạo độ dày 3D cho nút */
-    transition: all 0.1s;
-    /* Hiệu ứng mượt khi bấm */
+  padding: 15px 30px;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  background-color: #d9381e;
+  /* Màu đỏ cam */
+  border: 4px solid #5c3a21;
+  /* Viền nâu đậm */
+  border-radius: 12px;
+  cursor: pointer;
+  /* Đổi thành hình bàn tay khi trỏ vào nút (nếu không dùng búa) */
+  box-shadow: 0px 6px 0px #8b1e0b;
+  /* Tạo độ dày 3D cho nút */
+  transition: all 0.1s;
+  /* Hiệu ứng mượt khi bấm */
 }
 
 /* Hiệu ứng khi lướt chuột qua nút */
 .btn:hover {
-    background-color: #ff4a2b;
+  background-color: #ff4a2b;
 }
 
 /* Hiệu ứng khi bấm nút xuống (như nút vật lý) */
 .btn:active {
-    transform: translateY(4px);
-    /* Tụt xuống 4px */
-    box-shadow: 0px 2px 0px #8b1e0b;
-    /* Bóng xẹp lại */
+  transform: translateY(4px);
+  /* Tụt xuống 4px */
+  box-shadow: 0px 2px 0px #8b1e0b;
+  /* Bóng xẹp lại */
 }
 
 /* --- TRANG ĐIỂM MÀN HÌNH GAME OVER --- */
 #game-over-screen h2 {
-    font-size: 60px;
-    color: #d9381e;
-    text-shadow: 3px 3px 0px #fff;
-    margin-top: 100px;
-    margin-bottom: 20px;
+  font-size: 60px;
+  color: #d9381e;
+  text-shadow: 3px 3px 0px #fff;
+  margin-top: 100px;
+  margin-bottom: 20px;
 }
 
 #game-over-screen p {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 40px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 40px;
 }
 
 /* --- HIỆU ỨNG KHI ĐẬP TRÚNG CHUỘT --- */
 /* Nhóm 1 sẽ thêm class này bằng JavaScript khi người chơi click trúng con chuột */
 .mole.hit {
-    /* Ép con chuột lùn xuống một nửa để tạo cảm giác bị búa gõ bẹp */
-    transform: translateY(20px) scaleY(0.5);
-    /* Dừng mọi click khác để tránh đập 1 con 2 lần */
-    pointer-events: none;
-    /* Có thể dùng bộ lọc để chuột hơi tối lại khi bị choáng */
-    filter: brightness(0.8);
+  /* Ép con chuột lùn xuống một nửa để tạo cảm giác bị búa gõ bẹp */
+  transform: translateY(20px) scaleY(0.5);
+  /* Dừng mọi click khác để tránh đập 1 con 2 lần */
+  pointer-events: none;
+  /* Có thể dùng bộ lọc để chuột hơi tối lại khi bị choáng */
+  filter: brightness(0.8);
 }
-
-
 
 /* Chuẩn bị sẵn các class đổi nền để Nhóm 1 gọi ra bằng JavaScript */
 body.menu-bg {
-    background-image: url('../assets/bg_menu.png');
-    /* Chờ Nhóm 4 gửi ảnh này */
+  background-image: url("../assets/bg_menu.png");
+  /* Chờ Nhóm 4 gửi ảnh này */
 }
 
 body.game-bg {
-    background-image: url('../assets/bg_main.png');
-    /* Ảnh nền chơi game hiện tại */
+  background-image: url("../assets/bg_main.png");
+  /* Ảnh nền chơi game hiện tại */
 }
 
 body.gameover-bg {
-    background-image: url('../assets/bg_gameover.png');
-    /* Chờ Nhóm 4 gửi ảnh này */
+  background-image: url("../assets/bg_gameover.png");
+  /* Chờ Nhóm 4 gửi ảnh này */
 }
-
-
 
 /* --- BẢNG DEBUFF POP-UP --- */
 /* Lớp phủ đen mờ toàn màn hình để người chơi tập trung chọn thẻ */
 .modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    /* Đảm bảo nó nổi lên trên cùng */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  /* Đảm bảo nó nổi lên trên cùng */
 }
 
 .debuff-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 20px;
-    border: 5px solid #5c3a21;
-    text-align: center;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  border: 5px solid #5c3a21;
+  text-align: center;
 }
 
 .debuff-container h2 {
-    color: #d9381e;
-    margin-bottom: 20px;
+  color: #d9381e;
+  margin-bottom: 20px;
 }
 
 /* Khu vực chứa 3 tấm thẻ */
 .debuff-cards {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 /* Giao diện từng thẻ Debuff */
 .card {
-    width: 200px;
-    background-color: #fce7b1;
-    /* Nền vàng nhạt */
-    border: 3px solid #d9381e;
-    border-radius: 15px;
-    padding: 20px 10px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+  width: 200px;
+  background-color: #fce7b1;
+  /* Nền vàng nhạt */
+  border: 3px solid #d9381e;
+  border-radius: 15px;
+  padding: 20px 10px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    /* Bấm hụt thẻ bay lên một xíu */
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
-    background-color: #fff3d1;
+  transform: translateY(-10px);
+  /* Bấm hụt thẻ bay lên một xíu */
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+  background-color: #fff3d1;
 }
 
 .card h3 {
-    color: #5c3a21;
-    margin-bottom: 10px;
+  color: #5c3a21;
+  margin-bottom: 10px;
 }
 
 .card p {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 15px;
-    height: 60px;
-    /* Cố định chiều cao cho chữ khỏi xô lệch */
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 15px;
+  height: 60px;
+  /* Cố định chiều cao cho chữ khỏi xô lệch */
 }
 
 .card .bonus {
-    display: inline-block;
-    background-color: #4CAF50;
-    /* Nhãn màu xanh */
-    color: white;
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 14px;
+  display: inline-block;
+  background-color: #4caf50;
+  /* Nhãn màu xanh */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 /* ==========================================================
@@ -372,180 +374,178 @@ body.gameover-bg {
 
 /* --- SCORE POPUP (+10, -20, v.v.) --- */
 .score-popup {
-    .score-popup.fx-great {
-        background: url('../assets/fx_great.png') no-repeat center/contain;
-    }
+  .score-popup.fx-great {
+    background: url("../assets/fx_great.png") no-repeat center/contain;
+  }
 
-    .score-popup.fx-awesome {
-        background: url('../assets/fx_awesome.png') no-repeat center/contain;
-    }
+  .score-popup.fx-awesome {
+    background: url("../assets/fx_awesome.png") no-repeat center/contain;
+  }
 
-    .score-popup.fx-excellent {
-        background: url('../assets/fx_excellent.png') no-repeat center/contain;
-    }
+  .score-popup.fx-excellent {
+    background: url("../assets/fx_excellent.png") no-repeat center/contain;
+  }
 }
 
 @keyframes score-float {
-    0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -120%) scale(1.4);
-    }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -120%) scale(1.4);
+  }
 }
 
 /* --- HIT EFFECT (vòng tròn lan ra khi đập) --- */
 @keyframes hit-burst {
-    0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 1;
-        width: 20px;
-        height: 20px;
-    }
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+    width: 20px;
+    height: 20px;
+  }
 
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0;
-        width: 80px;
-        height: 80px;
-    }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    width: 80px;
+    height: 80px;
+  }
 }
 
 /* --- BOMB EFFECT --- */
 @keyframes bomb-pop {
-    0% {
-        transform: translate(-50%, -50%) scale(0) rotate(-20deg);
-        opacity: 1;
-    }
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-20deg);
+    opacity: 1;
+  }
 
-    60% {
-        transform: translate(-50%, -50%) scale(1.3) rotate(10deg);
-        opacity: 1;
-    }
+  60% {
+    transform: translate(-50%, -50%) scale(1.3) rotate(10deg);
+    opacity: 1;
+  }
 
-    100% {
-        transform: translate(-50%, -50%) scale(1) rotate(0deg);
-        opacity: 0;
-    }
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0;
+  }
 }
 
 /* --- DEBUFF: LỖ BỊ CHE TỐI --- */
 .hole.blinded {
-    filter: brightness(0.15);
-    pointer-events: none;
+  filter: brightness(0.15);
+  pointer-events: none;
 }
 
 /* --- DEBUFF: LỖ THU NHỎ --- */
 .hole.tiny {
-    transform: scale(0.8);
-    transition: transform 0.3s;
+  transform: scale(0.8);
+  transition: transform 0.3s;
 }
 
 /* --- BOM NHẤP NHÁY --- */
 @keyframes bomb-pulse-anim {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px orange);
+  }
 
-    0%,
-    100% {
-        filter: drop-shadow(0 0 4px orange);
-    }
-
-    50% {
-        filter: drop-shadow(0 0 12px red) brightness(1.3);
-    }
+  50% {
+    filter: drop-shadow(0 0 12px red) brightness(1.3);
+  }
 }
 
 .mole.bomb-pulse {
-    animation: bomb-pulse-anim 0.4s infinite;
+  animation: bomb-pulse-anim 0.4s infinite;
 }
 
 /* --- BOSS MOLE --- */
 .mole.boss {
-    filter: drop-shadow(0 0 8px purple);
+  filter: drop-shadow(0 0 8px purple);
 }
 
 /* --- FLASH MẤT MẠNG (toàn màn hình đỏ loé lên) --- */
 @keyframes life-lost-flash-anim {
-    0% {
-        box-shadow: inset 0 0 0px 0px rgba(231, 76, 60, 0);
-    }
+  0% {
+    box-shadow: inset 0 0 0px 0px rgba(231, 76, 60, 0);
+  }
 
-    30% {
-        box-shadow: inset 0 0 60px 30px rgba(231, 76, 60, 0.6);
-    }
+  30% {
+    box-shadow: inset 0 0 60px 30px rgba(231, 76, 60, 0.6);
+  }
 
-    100% {
-        box-shadow: inset 0 0 0px 0px rgba(231, 76, 60, 0);
-    }
+  100% {
+    box-shadow: inset 0 0 0px 0px rgba(231, 76, 60, 0);
+  }
 }
 
 body.life-lost-flash {
-    animation: life-lost-flash-anim 0.4s ease-out;
+  animation: life-lost-flash-anim 0.4s ease-out;
 }
 
 /* --- TIMER ĐỎ NHẤP NHÁY KHI SẮP HẾT GIỜ --- */
 @keyframes pulse-red {
+  0%,
+  100% {
+    opacity: 1;
+  }
 
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.4;
-    }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 /* --- GAME SUMMARY STATS --- */
 .game-summary {
-    margin: 10px 0 0 0;
-    text-align: center;
+  margin: 10px 0 0 0;
+  text-align: center;
 }
 
 .reason-text {
-    font-size: 26px;
-    font-weight: bold;
-    color: #d9381e;
-    margin-bottom: 16px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #d9381e;
+  margin-bottom: 16px;
 }
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    max-width: 400px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .stat-item {
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 10px;
-    padding: 10px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid #5c3a21;
-    font-size: 15px;
-    color: #333;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #5c3a21;
+  font-size: 15px;
+  color: #333;
 }
 
 .stat-item strong {
-    font-size: 22px;
-    color: #d9381e;
+  font-size: 22px;
+  color: #d9381e;
 }
 
 /* --- BUTTON small text --- */
 .btn small {
-    display: block;
-    font-size: 12px;
-    font-weight: normal;
-    opacity: 0.85;
-    margin-top: 2px;
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+  opacity: 0.85;
+  margin-top: 2px;
 }
 
 /* --- MODAL OVERLAY đặt fixed để che toàn màn hình --- */
 .modal-overlay {
-    position: fixed !important;
+  position: fixed !important;
 }
