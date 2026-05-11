@@ -70,7 +70,70 @@ h1 {
 .game-board.map3 .mole {
   width: 60px;
 }
+/* =========================
+   FIX MAP 3
+========================= */
 
+.game-board.map3 .hole {
+  width: 80px;
+  height: 80px;
+
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hộp của map 3 */
+.game-board.map3 .hole::after {
+  width: 70px;
+  height: 70px;
+
+  bottom: -15px;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-size: contain;
+}
+
+/* Chuột map 3 */
+.game-board.map3 .mole {
+  width: 55px;
+
+  /* Giấu sâu xuống dưới */
+  transform: translateY(120%);
+}
+
+/* Chuột trồi lên map 3 */
+.game-board.map3 .mole.up {
+  transform: translateY(-10px);
+}
+
+/* Rung đúng vị trí map 3 */
+.game-board.map3 .mole.warning {
+  animation: shakeMap3 0.2s infinite;
+}
+
+@keyframes shakeMap3 {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-10px) rotate(-8deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(8deg);
+  }
+
+  75% {
+    transform: translateY(-10px) rotate(-8deg);
+  }
+
+  100% {
+    transform: translateY(-10px) rotate(0deg);
+  }
+}
 /* Vẽ hình cái lỗ chuột bằng CSS */
 /* Vẽ hình cái lỗ chuột */
 .hole {
