@@ -5,6 +5,7 @@
 
 import { Game } from './core/game.js';
 
+
 // Chờ DOM load xong rồi mới khởi động game
 window.addEventListener('DOMContentLoaded', async () => {
     const game = new Game();

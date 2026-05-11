@@ -70,13 +70,14 @@ h1 {
 .game-board.map3 .mole {
   width: 60px;
 }
+
 /* =========================
    FIX MAP 3
 ========================= */
 
 .game-board.map3 .hole {
   width: 80px;
-  height: 80px;
+  height: 120px;
 
   overflow: hidden;
   position: relative;
@@ -105,7 +106,7 @@ h1 {
 
 /* Chuột trồi lên map 3 */
 .game-board.map3 .mole.up {
-  transform: translateY(-10px);
+  transform: translateY(-25px);
 }
 
 /* Rung đúng vị trí map 3 */
@@ -134,6 +135,7 @@ h1 {
     transform: translateY(-10px) rotate(0deg);
   }
 }
+
 /* Vẽ hình cái lỗ chuột bằng CSS */
 /* Vẽ hình cái lỗ chuột */
 .hole {
@@ -171,6 +173,7 @@ h1 {
 
   pointer-events: none;
 }
+
 /* Chỉnh kích thước và giấu chuột đi */
 .mole {
   width: 100px;
@@ -285,6 +288,8 @@ h1 {
 .menu-buttons {
   display: flex;
   gap: 20px;
+  position: relative;
+  z-index: 10;
   /* Khoảng cách giữa 2 nút */
 }
 
@@ -523,6 +528,7 @@ body.gameover-bg {
 
 /* --- BOM NHẤP NHÁY --- */
 @keyframes bomb-pulse-anim {
+
   0%,
   100% {
     filter: drop-shadow(0 0 4px orange);
@@ -563,6 +569,7 @@ body.life-lost-flash {
 
 /* --- TIMER ĐỎ NHẤP NHÁY KHI SẮP HẾT GIỜ --- */
 @keyframes pulse-red {
+
   0%,
   100% {
     opacity: 1;
@@ -623,4 +630,80 @@ body.life-lost-flash {
 /* --- MODAL OVERLAY đặt fixed để che toàn màn hình --- */
 .modal-overlay {
   position: fixed !important;
+}
+
+.menu-decor {
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* =========================
+   MENU FALLING EFFECTS
+========================= */
+
+#menu-effects {
+  position: fixed;
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+.falling-obj {
+  position: absolute;
+
+  top: -150px;
+
+  width: 100px;
+  pointer-events: none;
+  image-rendering: pixelated;
+
+  will-change: transform;
+
+  animation-name: fallingLoop;
+  animation-timing-function: linear;
+  animation-fill-mode: none;
+}
+
+@keyframes fallingLoop {
+
+  0% {
+    transform: translateY(-150px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}
+
+
+
+.menu-screen {
+  width: 50vw;
+  height: 50vh;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+  justify-content: center;
+  align-items: center;
+
+  gap: 40px;
+}
+
+.game-title {
+  width: 500px;
+
+  image-rendering: pixelated;
+
+  object-fit: contain;
 }
