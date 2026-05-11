@@ -100,7 +100,7 @@ h1 {
 
 /* Chỉnh kích thước và giấu chuột đi */
 .mole {
-  width: 20000000000000px;
+  width: 100px;
   /* Đẩy con chuột tụt hẳn xuống dưới đáy lỗ (100% chiều cao của nó) */
   transform: translateY(100%);
 
