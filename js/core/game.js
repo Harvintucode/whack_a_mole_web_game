@@ -20,6 +20,8 @@ import { HUD } from '../ui/hud.js';
 import { MenuUI } from '../ui/menu.js';
 import { GameOverUI } from '../ui/gameOver.js';
 
+import { HighScoreSystem } from '../systems/highScore.js';   // ← THÊM
+import { AudioSystem } from '../systems/audioSystem.js'; // ← THÊM
 export class Game {
   constructor() {
     // Core state
@@ -46,6 +48,8 @@ export class Game {
 
     // Debuff state
     this._activeDebuffs = [];
+    this.highScore = new HighScoreSystem();  // ← THÊM
+    this.audio = new AudioSystem();      // ← THÊM
   }
 
   // ==========================================================
@@ -76,6 +80,8 @@ export class Game {
     hide($('game-screen'));
     hide($('debuff-modal'));
     this.menuUI.show();
+    this._renderHighScores();  // ← THÊM
+    this.audio.play(0.35);
   }
 
   // ==========================================================
@@ -149,6 +155,7 @@ export class Game {
 
     // Bắt đầu!
     this._setState(GAME_STATES.PLAYING);
+    this.audio.play(0.3);
     this.spawnSystem.start();
     this.gameLoop.start();
   }
@@ -280,6 +287,9 @@ export class Game {
     this._setState(GAME_STATES.GAME_OVER);
     this._stopAll();
 
+    const finalScore = this.player.getScore();
+    const isNew = this.highScore.submit(this.currentMap, finalScore);
+
     hide($('game-screen'));
     this.hud.hide();
     hide($('debuff-modal'));
@@ -305,5 +315,38 @@ export class Game {
     this.spawnSystem?.stop();
     this.gameLoop?.stop();
     this.levelSystem?.resetBoard();
+  }
+  _renderHighScores() {
+    // Cập nhật điểm
+    const all = this.highScore.getAll();
+    ['map1', 'map2', 'map3'].forEach(id => {
+      const el = document.getElementById(`hs-${id}`);
+      if (!el) return;
+      el.textContent = all[id] > 0 ? all[id].toLocaleString() : '—';
+    });
+
+    // Khai báo trước, check sau — đúng thứ tự
+    const btn = document.getElementById('btn-highscore');
+    const overlay = document.getElementById('hs-overlay');
+    const closeBtn = document.getElementById('btn-hs-close');
+
+    if (!btn || !overlay || !closeBtn) return; // guard nếu DOM chưa có
+    if (btn.dataset.bound) return;             // tránh gắn listener nhiều lần
+    btn.dataset.bound = 'true';
+
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      overlay.classList.add('open');
+    });
+
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      overlay.classList.remove('open');
+    });
+
+    overlay.addEventListener('click', () => overlay.classList.remove('open'));
+
+    document.getElementById('highscore-panel')
+      .addEventListener('click', e => e.stopPropagation());
   }
 }

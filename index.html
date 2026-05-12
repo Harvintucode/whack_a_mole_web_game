@@ -23,6 +23,7 @@
 
      <!-- ===== MÀN HÌNH MENU ===== -->
      <div id="start-screen" class="screen">
+
           <div class="menu-screen">
 
                <!-- TITLE -->
@@ -30,6 +31,10 @@
                <div id="menu-effects">
 
                </div>
+               <!-- Icon trophy — góc phải trong #menu-screen -->
+               <button id="btn-highscore" aria-label="Xem kỷ lục">🏆</button>
+
+
 
 
           </div>
@@ -57,8 +62,8 @@
           <div id="game-summary" class="game-summary"></div>
 
           <div class="menu-buttons" style="margin-top: 30px;">
-               <button class="btn" id="btn-restart">🔄 Chơi lại</button>
-               <button class="btn" id="btn-menu">🏠 Menu</button>
+               <button class="btn" id="btn-restart"> Chơi lại</button>
+               <button class="btn" id="btn-menu"> Menu</button>
           </div>
      </div>
 
@@ -75,6 +80,50 @@
 
      <!-- ===== SCRIPT (ES Modules) ===== -->
      <script type="module" src="js/main.js"></script>
+     <audio id="bg-music" loop>
+          <source src="assets/audios/bg_music.mp3" type="audio/mpeg">
+     </audio>
+     <!-- Overlay + panel — đặt cuối <body> -->
+     <div id="hs-overlay">
+          <div id="highscore-panel" role="dialog" aria-modal="true" aria-label="Bảng kỷ lục">
+               <div class="hs-header">
+                    <p class="hs-title">🏆 Kỷ lục</p>
+                    <button id="btn-hs-close" aria-label="Đóng">✕</button>
+               </div>
+               <div class="hs-body">
+                    <div class="hs-row">
+                         <div class="hs-map-info">
+                              <div class="hs-medal m1">1</div>
+                              <div>
+                                   <span class="hs-label">Map 1</span>
+                                   <span class="hs-sublabel">Dễ</span>
+                              </div>
+                         </div>
+                         <span class="hs-value" id="hs-map1">—</span>
+                    </div>
+                    <div class="hs-row">
+                         <div class="hs-map-info">
+                              <div class="hs-medal m2">2</div>
+                              <div>
+                                   <span class="hs-label">Map 2</span>
+                                   <span class="hs-sublabel">Khó</span>
+                              </div>
+                         </div>
+                         <span class="hs-value" id="hs-map2">—</span>
+                    </div>
+                    <div class="hs-row">
+                         <div class="hs-map-info">
+                              <div class="hs-medal m3">3</div>
+                              <div>
+                                   <span class="hs-label">Map 3</span>
+                                   <span class="hs-sublabel">Vô Hạn</span>
+                              </div>
+                         </div>
+                         <span class="hs-value" id="hs-map3">—</span>
+                    </div>
+               </div>
+          </div>
+     </div>
 </body>
 
 </html>
