@@ -1,34 +1,28 @@
 // ==========================================================
 // scoreSystem.js – Hệ thống tính điểm
-// Xử lý: điểm cơ bản, combo multiplier, debuff effects
+// Xử lý: điểm cơ bản, score multiplier buff
 // ==========================================================
 
 export class ScoreSystem {
   constructor(player) {
-    this.player      = player;
-    this._listeners  = []; // Callback khi điểm thay đổi
-    this._debuffTriggerScore = 50; // Mặc định, sẽ được overwrite bởi level
-    this._lastDebuffAt = 0;  // Điểm lần cuối trigger debuff
-  }
-
-  /** Cài debuff trigger từ config level */
-  configure(levelConfig) {
-    this._debuffTriggerScore = levelConfig.debuffTriggerScore || 50;
+    this.player = player;
+    this._listeners = []; // Callback khi điểm thay đổi
+    // BUG FIX: bỏ _debuffTriggerScore, _lastDebuffAt, _checkDebuffTrigger
+    // Debuff milestone giờ do SpawnSystem quản lý hoàn toàn
   }
 
   /**
-   * Xử lý đập TRÚNG chuột – cộng điểm + kiểm tra debuff trigger
-   * @param {Object}   typeData – Loại chuột bị đập
-   * @returns {{ earned: number, shouldTriggerDebuff: boolean }}
+   * Xử lý đập TRÚNG chuột – cộng điểm có áp dụng multiplier buff
+   * @param {Object} typeData    – Loại chuột bị đập
+   * @param {number} multiplier  – Hệ số nhân điểm (từ SpawnSystem buff, mặc định 1)
+   * @returns {number} earned    – Số điểm thực tế được cộng
    */
-  onMoleHit(typeData) {
+  onMoleHit(typeData, multiplier = 1) {
     this.player.registerHit();
-    const earned = this.player.addScore(typeData.points);
-
-    const shouldTriggerDebuff = this._checkDebuffTrigger();
+    // BUG FIX #3: nhân điểm với multiplier (buff x2 score)
+    const earned = this.player.addScore(Math.round(typeData.points * multiplier));
     this._notifyListeners(earned);
-
-    return { earned, shouldTriggerDebuff };
+    return earned;
   }
 
   /**
@@ -39,23 +33,9 @@ export class ScoreSystem {
     this._notifyListeners(0);
   }
 
-  /**
-   * Kiểm tra xem có nên bật màn debuff không
-   * Trigger mỗi `_debuffTriggerScore` điểm
-   */
-  _checkDebuffTrigger() {
-    const score = this.player.getScore();
-    const threshold = this._lastDebuffAt + this._debuffTriggerScore;
-    if (score >= threshold) {
-      this._lastDebuffAt = Math.floor(score / this._debuffTriggerScore) * this._debuffTriggerScore;
-      return true;
-    }
-    return false;
-  }
-
   /** Reset hệ thống điểm cho ván mới */
   reset() {
-    this._lastDebuffAt = 0;
+    // Không còn state nội bộ cần reset
   }
 
   /** Đăng ký callback khi điểm thay đổi */

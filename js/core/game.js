@@ -4,49 +4,48 @@
 // ==========================================================
 
 import { GAME_STATES, DEBUFFS, SETTINGS } from '../utils/constants.js';
-import { $, show, hide, setText, shuffle }  from '../utils/helper.js';
-import { shuffle as shuffleArr }             from '../utils/math.js';
+import { $, show, hide, setText } from '../utils/helper.js';
+import { shuffle as shuffleArr } from '../utils/math.js';  // BUG FIX #5: bỏ import shuffle thừa từ helper
 
-import { Player }        from '../entities/player.js';
-import { ScoreSystem }   from '../systems/scoreSystem.js';
-import { HealthSystem }  from '../systems/healthSystem.js';
-import { SpawnSystem }   from '../systems/spawnSystem.js';
-import { LevelSystem }   from '../systems/levelSystem.js';
-import { GameLoop }      from './loop.js';
-import { InputHandler }  from './input.js';
+import { Player } from '../entities/player.js';
+import { ScoreSystem } from '../systems/scoreSystem.js';
+import { HealthSystem } from '../systems/healthSystem.js';
+import { SpawnSystem } from '../systems/spawnSystem.js';
+import { LevelSystem } from '../systems/levelSystem.js';
+import { GameLoop } from './loop.js';
+import { InputHandler } from './input.js';
 import { spawnHitEffect } from '../entities/bullet.js';
 
-import { HUD }          from '../ui/hud.js';
-import { MenuUI }       from '../ui/menu.js';
-import { GameOverUI }   from '../ui/gameOver.js';
+import { HUD } from '../ui/hud.js';
+import { MenuUI } from '../ui/menu.js';
+import { GameOverUI } from '../ui/gameOver.js';
 
 export class Game {
   constructor() {
     // Core state
-    this.state       = GAME_STATES.MENU;
-    this.currentMap  = null;
+    this.state = GAME_STATES.MENU;
+    this.currentMap = null;
 
     // Entities
-    this.player      = new Player(SETTINGS.INITIAL_LIVES);
+    this.player = new Player(SETTINGS.INITIAL_LIVES);
 
     // Systems (khởi tạo sau khi load data)
-    this.levelSystem  = new LevelSystem();
-    this.scoreSystem  = null;
+    this.levelSystem = new LevelSystem();
+    this.scoreSystem = null;
     this.healthSystem = null;
-    this.spawnSystem  = null;
-    this.gameLoop     = null;
+    this.spawnSystem = null;
+    this.gameLoop = null;
 
     // Core
-    this.input        = new InputHandler();
+    this.input = new InputHandler();
 
     // UI
-    this.hud          = new HUD();
-    this.menuUI       = new MenuUI();
-    this.gameOverUI   = new GameOverUI();
+    this.hud = new HUD();
+    this.menuUI = new MenuUI();
+    this.gameOverUI = new GameOverUI();
 
     // Debuff state
     this._activeDebuffs = [];
-    this._pendingDebuff = false;
   }
 
   // ==========================================================
@@ -54,16 +53,13 @@ export class Game {
   // ==========================================================
 
   async init() {
-    // Nạp dữ liệu JSON
     await this.levelSystem.loadData();
 
-    // Gắn listener cho menu buttons
     this.input.setupMenuListeners();
     this.input.on('map_select', (mapId) => this.startGame(mapId));
-    this.input.on('restart',   ()       => this.restartGame());
-    this.input.on('go_menu',   ()       => this.goToMenu());
+    this.input.on('restart', () => this.restartGame());
+    this.input.on('go_menu', () => this.goToMenu());
 
-    // Hiển thị menu
     this.goToMenu();
   }
 
@@ -91,10 +87,12 @@ export class Game {
     const levelConfig = this.levelSystem.getLevelConfig(mapId);
     if (!levelConfig) { console.error('Level không tồn tại:', mapId); return; }
 
+    // BUG FIX #6: tính mapIndex từ id string
+    const mapIndex = this.levelSystem.levelsData.findIndex(l => l.id === mapId);
+
     // Đặt lại trạng thái
     this.player.reset();
     this._activeDebuffs = [];
-    this._pendingDebuff = false;
 
     // Ẩn menu, hiện game
     this.menuUI.hide();
@@ -103,31 +101,32 @@ export class Game {
 
     // Xây bảng game
     const boardEl = $('game-board');
-    const moles   = this.levelSystem.buildBoard(boardEl, levelConfig);
+    const moles = this.levelSystem.buildBoard(boardEl, levelConfig);
     const moleTypes = this.levelSystem.getMoleTypes();
 
     // Khởi tạo hệ thống điểm
     this.scoreSystem = new ScoreSystem(this.player);
-    this.scoreSystem.configure(levelConfig);
     this.scoreSystem.onChange((score) => this.hud.updateScore(score));
 
     // Khởi tạo hệ thống máu
     this.healthSystem = new HealthSystem(
       this.player,
       (reason) => this._onGameOver(reason),
-      (lives)  => this.hud.updateLives(lives),
+      (lives) => this.hud.updateLives(lives),
     );
 
-    // Khởi tạo hệ thống spawn
+    // BUG FIX #1: truyền đúng thứ tự tham số, thêm mapIndex và onDebuffReady
     this.spawnSystem = new SpawnSystem(
       moles,
       moleTypes,
       levelConfig,
-      (typeData)       => this._onMoleEscape(typeData),
-      (points, typeData) => this._onMoleHit(points, typeData),
+      mapIndex,                                                    // ← mapIndex
+      (typeData) => this._onMoleEscape(typeData),          // ← onEscape
+      (points, typeData) => this._onMoleHit(points, typeData),     // ← onHit (không dùng cho score)
+      () => this._showDebuffPicker(),              // ← onDebuffReady (BUG FIX #7)
     );
 
-    // Gắn click listener vào từng lỗ
+    // Gắn click listener
     this.levelSystem.attachClickListeners((mole, event) => {
       this._handleMoleClick(mole, event);
     });
@@ -137,18 +136,18 @@ export class Game {
     this.hud.reset(levelConfig.duration, this.player.lives);
     this.hud.show();
 
-    // Đặt background game
+    // Đặt background
     document.body.className = levelConfig.bgClass;
 
-    // Khởi tạo game loop đếm ngược
+    // Khởi tạo game loop
     this.gameLoop = new GameLoop(
-      (delta)   => { /* Tick hàng frame nếu cần animation logic */ },
+      (delta) => { /* Tick hàng frame */ },
       (timeLeft) => this.hud.updateTime(timeLeft),
-      ()         => this._onTimeUp(),
+      () => this._onTimeUp(),
       levelConfig.duration,
     );
 
-    // Chuyển state và bắt đầu!
+    // Bắt đầu!
     this._setState(GAME_STATES.PLAYING);
     this.spawnSystem.start();
     this.gameLoop.start();
@@ -161,24 +160,23 @@ export class Game {
   _handleMoleClick(mole, event) {
     if (this.state !== GAME_STATES.PLAYING) return;
 
-    // Chuột đang nhô lên → xử lý đập
     if (mole.isActive()) {
       const points = mole.handleClick();
 
       if (points !== null) {
-        // Đập trúng thành công
         spawnHitEffect(mole.holeEl, event, mole.typeData);
 
         if (mole.typeData.isBad) {
           // Đập phải bom → mất mạng
           this.healthSystem.onBombHit(mole.typeData);
         } else {
-          // Đập trúng chuột thường
-          const { shouldTriggerDebuff } = this.scoreSystem.onMoleHit(mole.typeData);
-          if (shouldTriggerDebuff && !this._pendingDebuff) {
-            this._pendingDebuff = true;
-            setTimeout(() => this._showDebuffPicker(), 300);
-          }
+          // BUG FIX #4: bỏ shouldTriggerDebuff cũ, dùng notifyScore để kích hoạt milestone
+          // BUG FIX #3: áp dụng score multiplier từ SpawnSystem (buff x2)
+          const multiplier = this.spawnSystem.getScoreMultiplier();
+          this.scoreSystem.onMoleHit(mole.typeData, multiplier);
+
+          // BUG FIX #2: gọi notifyScore để SpawnSystem kiểm tra milestone debuff
+          this.spawnSystem.notifyScore(this.player.getScore());
         }
       }
     } else {
@@ -192,23 +190,30 @@ export class Game {
     this.healthSystem.onMoleEscape(typeData);
   }
 
-  _onMoleHit(points, typeData) {
-    // Được gọi từ SpawnSystem khi mole báo hit (không dùng ở đây vì đã xử lý trong handleClick)
-  }
+  // Callback từ SpawnSystem khi mole bị đập (không xử lý score ở đây,
+  // score được tính trong _handleMoleClick để đảm bảo single source of truth)
+  _onMoleHit(points, typeData) { }
 
   // ==========================================================
   // DEBUFF SYSTEM
   // ==========================================================
 
+  // BUG FIX #7: _showDebuffPicker bây giờ được gọi từ SpawnSystem.onDebuffReady
+  // (sau khi đạt milestone VÀ wave đã trống), không dùng setTimeout nữa
   _showDebuffPicker() {
     if (this.state !== GAME_STATES.PLAYING) return;
 
     this._setState(GAME_STATES.DEBUFF_PICK);
-    this.spawnSystem.pause();
+    // spawnSystem.pause() đã được SpawnSystem tự gọi trước khi trigger callback
     this.gameLoop.pause();
 
-    // Chọn 3 debuff ngẫu nhiên
-    const picks = shuffleArr(DEBUFFS).slice(0, 3);
+    // Lọc TINY_HOLES nếu đã dùng rồi
+    const available = DEBUFFS.filter(d => {
+      if (d.effect === 'TINY_HOLES' && this.spawnSystem._tinyHolesUsed) return false;
+      return true;
+    });
+
+    const picks = shuffleArr(available).slice(0, 3);
     this._renderDebuffCards(picks);
     show($('debuff-modal'));
   }
@@ -235,7 +240,6 @@ export class Game {
   _applyDebuff(debuff) {
     hide($('debuff-modal'));
     this._activeDebuffs.push(debuff.id);
-    this._pendingDebuff = false;
 
     // Cộng bonus điểm / mạng
     if (debuff.bonusScore > 0) {
@@ -246,17 +250,17 @@ export class Game {
       this.healthSystem.addLives(debuff.bonusLife);
     }
 
-    // Áp dụng effect lên spawn system
+    // Áp dụng effect spawn
     this.spawnSystem.applyDebuff(debuff.effect);
 
-    // Áp dụng visual effect lên level
+    // Áp dụng visual effect
     if (debuff.effect === 'BLIND_HOLES') {
       this.levelSystem.applyBlindHoles(3);
     } else if (debuff.effect === 'TINY_HOLES') {
       this.levelSystem.applyTinyHoles(true);
     }
 
-    // Resume game
+    // Resume game — spawnSystem.resume() tự reset _pendingDebuff bên trong
     this._setState(GAME_STATES.PLAYING);
     this.spawnSystem.resume();
     this.gameLoop.resume();
@@ -297,7 +301,6 @@ export class Game {
     this.state = newState;
   }
 
-  /** Dừng tất cả systems */
   _stopAll() {
     this.spawnSystem?.stop();
     this.gameLoop?.stop();

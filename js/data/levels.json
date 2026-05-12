@@ -45,9 +45,9 @@
       "cols": 4,
       "rows": 3,
       "duration": 90,
-      "maxActiveMoles": 2,
+      "maxActiveMoles": 1,
       "spawnInterval": 700,
-      "speedMultiplier": 0.5,
+      "speedMultiplier": 0.3,
       "allowedTypes": [
         "normal",
         "fast",

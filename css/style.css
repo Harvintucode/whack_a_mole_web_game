@@ -21,14 +21,14 @@ body {
 
   /* Đổi con trỏ chuột mặc định thành hình cái búa */
   cursor:
-    url("../assets/hammer_icon.png") 32 32,
+    url("../assets/hammer_icon.png") 48 48,
     auto;
 }
 
 /* Khi người chơi bấm chuột (click) thì đổi sang hình búa đang đập */
 body:active {
   cursor:
-    url("../assets/hammer_slamicon.png") 32 32,
+    url("../assets/hammer_slamicon.png") 48 48,
     auto;
 }
 
@@ -181,7 +181,9 @@ h1 {
   position: relative;
   z-index: 1;
   transform: translateY(100%);
-
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
   /* Tạo hiệu ứng trượt lên/xuống mượt mà trong 0.3 giây */
   transition: transform 0.5s ease-out;
 
@@ -298,12 +300,20 @@ h1 {
   width: 160px;
   height: 120px;
 
+  color: rgb(0, 0, 0);
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+
+
   background: url("../assets/button.png") no-repeat center/contain;
   background-size: 90% 90%;
   border: none;
   cursor: pointer;
 
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-size: 20px;
   font-weight: bold;
 
