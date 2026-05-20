@@ -30,7 +30,7 @@ const menuEffects =
   document.getElementById("menu-effects");
 let fallingInterval;
 const fallingImages = [
-  "../assets/falling_obj.png",
+  "assets/falling_obj.png",
 ];
 
 export function spawnFallingObject() {
