@@ -44,7 +44,7 @@
       "label": "Địa Ngục",
       "cols": 4,
       "rows": 3,
-      "duration": 90,
+      "duration": 9999,
       "maxActiveMoles": 1,
       "spawnInterval": 700,
       "speedMultiplier": 0.3,

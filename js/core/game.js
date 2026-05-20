@@ -349,4 +349,5 @@ export class Game {
     document.getElementById('highscore-panel')
       .addEventListener('click', e => e.stopPropagation());
   }
+
 }

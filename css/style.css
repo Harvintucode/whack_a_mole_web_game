@@ -212,7 +212,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   /* Đẩy 3 thông số ra xa nhau */
-  width: 650px;
+  width: 750px;
   /* Bằng với chiều rộng dự kiến của bảng game */
   margin-top: 15px;
   padding: 10px 20px;
