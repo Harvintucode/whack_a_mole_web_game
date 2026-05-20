@@ -1,0 +1,63 @@
+{
+  "levels": [
+    {
+      "id": "map1",
+      "name": "Map 1",
+      "label": "Dễ",
+      "cols": 3,
+      "rows": 2,
+      "duration": 60,
+      "maxActiveMoles": 1,
+      "spawnInterval": 1200,
+      "speedMultiplier": 0.15,
+      "allowedTypes": [
+        "normal",
+        "fast"
+      ],
+      "bombWeight": 0,
+      "debuffTriggerScore": 50,
+      "bgClass": "game-bg"
+    },
+    {
+      "id": "map2",
+      "name": "Map 2",
+      "label": "Khó",
+      "cols": 3,
+      "rows": 2,
+      "duration": 60,
+      "maxActiveMoles": 1,
+      "spawnInterval": 900,
+      "speedMultiplier": 0.30,
+      "allowedTypes": [
+        "normal",
+        "fast",
+        "tough",
+        "golden"
+      ],
+      "bombWeight": 3,
+      "debuffTriggerScore": 60,
+      "bgClass": "game-bg"
+    },
+    {
+      "id": "map3",
+      "name": "Map 3",
+      "label": "Địa Ngục",
+      "cols": 4,
+      "rows": 3,
+      "duration": 90,
+      "maxActiveMoles": 1,
+      "spawnInterval": 700,
+      "speedMultiplier": 0.3,
+      "allowedTypes": [
+        "normal",
+        "fast",
+        "tough",
+        "golden",
+        "bomb"
+      ],
+      "bombWeight": 8,
+      "debuffTriggerScore": 70,
+      "bgClass": "game-bg"
+    }
+  ]
+}

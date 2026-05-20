@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>Đập Chuột!</title>
+     <link rel="icon" type="image/png" href="./assets/hamster_normal.png">
+     <link rel="stylesheet" href="./css/style.css" />
+     <link rel="stylesheet" href="./css/style-extra.css" />
+</head>
+
+<body class="menu-bg">
+
+     <!-- ===== TIÊU ĐỀ ===== -->
+
+     <!-- ===== HUD (ẩn lúc đầu) ===== -->
+     <div class="hud hidden" id="hud">
+          <div class="stat">⭐ Điểm: <span id="score-value">0</span></div>
+          <div class="stat">⏰ Thời gian: <span id="time-value">01:00</span></div>
+          <div class="stat">❤️ Mạng: <span id="lives-value">❤️❤️❤️</span></div>
+     </div>
+
+     <!-- ===== MÀN HÌNH MENU ===== -->
+     <div id="start-screen" class="screen">
+
+          <div class="menu-screen">
+
+               <!-- TITLE -->
+               <img src="./assets/title.png" class="game-title">
+               <div id="menu-effects">
+
+               </div>
+               <!-- Icon trophy — góc phải trong #menu-screen -->
+               <button id="btn-highscore" aria-label="Xem kỷ lục">🏆</button>
+
+
+
+
+          </div>
+          <p>Chọn bản đồ để bắt đầu!</p>
+          <div class="menu-buttons">
+               <button class="btn" id="btn-map1">Map 1<br /><small>Dễ – 3x2</small></button>
+               <button class="btn" id="btn-map2">Map 2<br /><small>Khó – 3x2</small></button>
+               <button class="btn" id="btn-map3">Map 3<br /><small>Vô Hạn – 4x3</small></button>
+          </div>
+     </div>
+
+     <!-- ===== MÀN HÌNH CHƠI GAME ===== -->
+     <div id="game-screen" class="screen hidden">
+          <div class="game-board" id="game-board">
+               <!-- Các lỗ chuột sẽ được tạo tự động bởi JS (LevelSystem.buildBoard) -->
+          </div>
+     </div>
+
+     <!-- ===== MÀN HÌNH GAME OVER ===== -->
+     <div id="game-over-screen" class="screen hidden">
+          <h2>GAME OVER</h2>
+          <p>Điểm của bạn: <span id="final-score">0</span></p>
+
+          <!-- Thống kê chi tiết -->
+          <div id="game-summary" class="game-summary"></div>
+
+          <div class="menu-buttons" style="margin-top: 30px;">
+               <button class="btn" id="btn-restart"> Chơi lại</button>
+               <button class="btn" id="btn-menu"> Menu</button>
+          </div>
+     </div>
+
+     <!-- ===== BẢNG DEBUFF (popup chọn thử thách) ===== -->
+     <div class="modal-overlay hidden" id="debuff-modal">
+          <div class="debuff-container">
+               <h2>⚠️ Chọn Thử Thách!</h2>
+               <p style="margin-bottom:16px; color:#555;">Chọn 1 debuff để nhận thưởng!</p>
+               <div class="debuff-cards" id="debuff-cards">
+                    <!-- 3 thẻ debuff sẽ được tạo bởi JS (game.js _renderDebuffCards) -->
+               </div>
+          </div>
+     </div>
+
+     <!-- ===== SCRIPT (ES Modules) ===== -->
+     <script type="module" src="js/main.js"></script>
+     <audio id="bg-music" loop>
+          <source src="assets/audios/bg_music.mp3" type="audio/mpeg">
+     </audio>
+     <!-- Overlay + panel — đặt cuối <body> -->
+     <div id="hs-overlay">
+          <div id="highscore-panel" role="dialog" aria-modal="true" aria-label="Bảng kỷ lục">
+               <div class="hs-header">
+                    <p class="hs-title">🏆 Kỷ lục</p>
+                    <button id="btn-hs-close" aria-label="Đóng">✕</button>
+               </div>
+               <div class="hs-body">
+                    <div class="hs-row">
+                         <div class="hs-map-info">
+                              <div class="hs-medal m1">1</div>
+                              <div>
+                                   <span class="hs-label">Map 1</span>
+                                   <span class="hs-sublabel">Dễ</span>
+                              </div>
+                         </div>
+                         <span class="hs-value" id="hs-map1">—</span>
+                    </div>
+                    <div class="hs-row">
+                         <div class="hs-map-info">
+                              <div class="hs-medal m2">2</div>
+                              <div>
+                                   <span class="hs-label">Map 2</span>
+                                   <span class="hs-sublabel">Khó</span>
+                              </div>
+                         </div>
+                         <span class="hs-value" id="hs-map2">—</span>
+                    </div>
+                    <div class="hs-row">
+                         <div class="hs-map-info">
+                              <div class="hs-medal m3">3</div>
+                              <div>
+                                   <span class="hs-label">Map 3</span>
+                                   <span class="hs-sublabel">Vô Hạn</span>
+                              </div>
+                         </div>
+                         <span class="hs-value" id="hs-map3">—</span>
+                    </div>
+               </div>
+          </div>
+     </div>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+{
+  "mole_types": [
+    {
+      "id": "normal",
+      "name": "Chuột Thường",
+      "hitsRequired": 1,
+      "points": 10,
+      "upDuration": 1500,
+      "weight": 50,
+      "img": "hamster_normal.png",
+      "hitImg": "hamster_normal_hit.png",
+      "isBad": false,
+      "color": "#a0522d"
+    },
+    {
+      "id": "fast",
+      "name": "Chuột Nhanh",
+      "hitsRequired": 1,
+      "points": 20,
+      "upDuration": 800,
+      "weight": 25,
+      "img": "hamster_electric.png",
+      "hitImg": "hamster_electric_hit.png",
+      "isBad": false,
+      "color": "#ff8c00"
+    },
+    {
+      "id": "tough",
+      "name": "Chuột Cứng Đầu",
+      "hitsRequired": 2,
+      "points": 30,
+      "upDuration": 2000,
+      "weight": 15,
+      "img": "hamster_helmet.png",
+      "hitImg": "hamster_helmet_hit.png",
+      "isBad": false,
+      "color": "#8b0000"
+    },
+    {
+      "id": "golden",
+      "name": "Chuột Vàng",
+      "hitsRequired": 1,
+      "points": 50,
+      "upDuration": 900,
+      "weight": 8,
+      "img": "hamster_medic.png",
+      "hitImg": "hamster_medic_hit.png",
+      "isBad": false,
+      "color": "#ffd700"
+    },
+    {
+      "id": "bomb",
+      "name": "Quả Bom",
+      "hitsRequired": 1,
+      "points": -20,
+      "upDuration": 1500,
+      "weight": 2,
+      "img": "hamster_bomb.png",
+      "hitImg": "hamster_bomb_hit.png",
+      "isBad": true,
+      "color": "#222"
+    }
+  ]
+}
